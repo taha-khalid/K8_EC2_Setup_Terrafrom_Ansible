@@ -1,0 +1,46 @@
+---
+- name: Install containerd runtime
+  apt:
+    name: containerd
+    state: present
+
+- name: Create CNI bin directory
+  file:
+    path: /opt/cni/bin
+    state: directory
+    mode: '0755'
+  
+- name: Download standard CNI plugins v1.9.1 via curl
+  command: >
+    curl -L -o /tmp/cni-plugins-linux-amd64-v1.9.1.tgz 
+    https://github.com/containernetworking/plugins/releases/download/v1.9.1/cni-plugins-linux-amd64-v1.9.1.tgz
+  args:
+    creates: /tmp/cni-plugins-linux-amd64-v1.9.1.tgz
+
+- name: Extract standard CNI plugins to /opt/cni/bin
+  unarchive:
+    src: /tmp/cni-plugins-linux-amd64-v1.9.1.tgz
+    dest: /opt/cni/bin
+    remote_src: yes
+
+- name: Create containerd config directory
+  file:
+    path: /etc/containerd
+    state: directory
+
+- name: Generate default containerd config
+  shell: containerd config default > /etc/containerd/config.toml
+  args:
+    creates: /etc/containerd/config.toml
+
+- name: Enable SystemCgroup in containerd config.toml
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: 'SystemdCgroup = false'
+    line: '            SystemdCgroup = true'
+
+- name: Restart containerd service
+  systemd:
+    name: containerd
+    state: restarted
+    enabled: yes

@@ -1,0 +1,39 @@
+---
+- name: Create Keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  
+- name: Download Kubernetes GPG Signing Key via curl
+  command: >
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key -o /etc/apt/keyrings/kubernetes-apt-keyring.asc
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+
+- name: Dearmor Kubernetes GPG key
+  command: gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg /etc/apt/keyrings/kubernetes-apt-keyring.asc
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+- name: Add Kubernetes APT repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /"
+    state: present
+    filename: kubernetes
+
+- name: Install kubelet and kubeadm
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+    state: present
+    update_cache: yes
+
+- name: Hold kubelet and kubeadm at current version
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
