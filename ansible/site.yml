@@ -1,0 +1,30 @@
+---
+# 1. Common setup for ALL nodes
+- name: Prepare All Kubernetes Nodes
+  hosts: all
+  become: true
+  roles:
+    - common
+    - containerd
+    - k8s_tools
+
+# 2. Control Plane setup (Get the join token)
+- name: Provision Master Node
+  hosts: masters
+  become: true
+  roles:
+    - master
+
+# 3. Worker Nodes setup (Retrieves the token from master and joins)
+- name: Provision Worker Nodes
+  hosts: workers
+  become: true
+  roles:
+    - worker
+
+# 4. Install Cilium CNI on the cluster
+- name: Install Cilium CNI
+  hosts: masters
+  become: true
+  roles:
+    - cilium

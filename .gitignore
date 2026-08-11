@@ -1,3 +1,17 @@
+# ------------------------------------------------------------------------------
+# Terragrunt Ignored Files & Cache
+# ------------------------------------------------------------------------------
+
+# Ignore Terragrunt cache directories generated during run/apply
+**/.terragrunt-cache/
+
+# Ignore auto-generated backend/provider files created by Terragrunt code generation
+backend.tf
+provider.tf
+
+# ------------------------------------------------------------------------------
+# Standard Terraform Exclusions
+# ------------------------------------------------------------------------------
 # Local .terraform directories
 .terraform/
 

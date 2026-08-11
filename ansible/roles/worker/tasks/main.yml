@@ -1,0 +1,3 @@
+---
+- name: Join worker node to the Kubernetes cluster
+  command: "{{ hostvars[groups['masters'][0]]['join_command'] }}"
