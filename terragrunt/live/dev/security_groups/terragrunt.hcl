@@ -10,7 +10,7 @@ include "env" {
 
 terraform {
   # Double slash // defines the module path, ?ref=main defines the branch
-  source = "git::https://github.com/taha-khalid/Terraform_Modules.git//security_groups?ref=main"
+  source = "git::https://github.com/taha-khalid/Terraform_Modules.git//security_groups?ref=v1.0.0"
 }
 
 dependency "vpc" {

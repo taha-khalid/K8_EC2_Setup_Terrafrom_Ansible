@@ -9,7 +9,7 @@ include "env" {
 
 terraform {
   # Double slash // defines the module path, ?ref=main defines the branch
-  source = "git::https://github.com/taha-khalid/Terraform_Modules.git//ec2?ref=main"
+  source = "git::https://github.com/taha-khalid/Terraform_Modules.git//ec2?ref=v1.0.0"
 }
 
 dependency "vpc" {
