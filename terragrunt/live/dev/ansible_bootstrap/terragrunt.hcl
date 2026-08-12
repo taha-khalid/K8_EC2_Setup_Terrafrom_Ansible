@@ -34,7 +34,7 @@ dependency "worker" {
 # Use a dummy source so Terraform doesn't expect EC2 variables
 terraform {
   # Double slash // defines the module path, ?ref=main defines the branch
-  source = "git::https://github.com/taha-khalid/Terraform_Modules.git//null?ref=main"
+  source = "git::https://github.com/taha-khalid/Terraform_Modules.git//null?ref=v1.0.0"
 
   after_hook "run_ansible" {
     commands = ["apply"]
